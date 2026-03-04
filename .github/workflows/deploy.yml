@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx vite build
+      - name: Encrypt site with password
+        run: npx staticrypt dist/index.html -p "${{ secrets.SITE_PASSWORD }}" --short -d dist
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
