@@ -118,22 +118,11 @@ function getFileIcon(fileType?: string): string {
 
 function getSectorColor(sector: string): string {
   const colors: Record<string, string> = {
-    'Finance': 'bg-green-100 text-green-800',
-    'People & Culture': 'bg-purple-100 text-purple-800',
-    'Supply Chain': 'bg-blue-100 text-blue-800',
-    'Safety & Security': 'bg-red-100 text-red-800',
-    'Safeguarding': 'bg-pink-100 text-pink-800',
-    'MEAL': 'bg-amber-100 text-amber-800',
-    'Grants': 'bg-cyan-100 text-cyan-800',
-    'Partnerships': 'bg-orange-100 text-orange-800',
-    'Response Management': 'bg-yellow-100 text-yellow-800',
-    'Technical Programs': 'bg-indigo-100 text-indigo-800',
-    'Integra': 'bg-teal-100 text-teal-800',
-    'Emergency Unit': 'bg-red-100 text-red-800',
-    'Preparedness': 'bg-yellow-100 text-yellow-800',
+    'Emergency Unit': 'bg-irc-gray-100 text-irc-crisis-red',
+    'Response Management': 'bg-yellow-50 text-yellow-800',
     'Guidelines': 'bg-irc-gray-100 text-irc-gray-700',
   };
-  return colors[sector] || 'bg-irc-gray-100 text-irc-gray-500';
+  return colors[sector] || 'bg-irc-gray-100 text-irc-gray-700 font-semibold';
 }
 
 export default function Resources() {

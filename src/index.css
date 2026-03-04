@@ -5,13 +5,29 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply min-h-screen text-sm leading-[1.4];
+    @apply min-h-screen text-sm leading-[1.4] font-normal;
   }
-  /* IRC Brand: Bold headings with tight tracking, regular body */
-  h1, h2, h3, h4 {
-    @apply font-bold tracking-irc-tight;
+  /* IRC Brand Type Scale:
+     Page title: 24px bold | Section head: 18px bold
+     Card title: 14px medium | Body: 14px regular | Caption: 12px regular */
+  h1 {
+    @apply text-2xl font-bold tracking-irc-tight;
+    line-height: 1;
+  }
+  h2 {
+    @apply text-lg font-bold tracking-irc-tight;
+    line-height: 1;
+  }
+  h3 {
+    @apply text-sm font-medium tracking-irc-tight;
+    line-height: 1;
+  }
+  h4 {
+    @apply text-sm font-medium tracking-irc-tight;
     line-height: 1;
   }
   p, li, td {
@@ -36,13 +52,13 @@
     @apply bg-irc-gray-100 text-irc-gray-700;
   }
   .badge-new {
-    @apply bg-purple-100 text-purple-800;
+    @apply bg-irc-gray-100 text-irc-gray-700;
   }
   .badge-existing {
-    @apply bg-green-100 text-green-800;
+    @apply bg-irc-gray-100 text-irc-gray-500;
   }
   .card {
-    @apply bg-white rounded-lg border border-irc-gray-200 shadow-sm;
+    @apply bg-white rounded-lg border border-irc-gray-200;
   }
   .btn {
     @apply inline-flex items-center justify-center px-4 py-2 rounded-md text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2;
@@ -99,7 +115,7 @@
   @apply border-l-4 border-irc-yellow pl-3 italic my-2 text-irc-gray-700;
 }
 .chat-content a {
-  @apply text-blue-600 underline hover:text-blue-800;
+  @apply text-irc-gray-700 underline hover:text-black;
 }
 .chat-content table {
   @apply w-full border-collapse text-xs my-2;

@@ -10,19 +10,19 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Hero */}
-      <div className="text-center mb-10">
-        <img src={ircLogoFull} alt="International Rescue Committee" className="h-16 mx-auto mb-5" />
-        <h1 className="text-2xl sm:text-3xl font-bold text-black mb-3 tracking-irc-tight">
+      <div className="text-center mb-14">
+        <img src={ircLogoFull} alt="International Rescue Committee" className="h-16 mx-auto mb-6" />
+        <h1 className="text-2xl sm:text-3xl font-bold text-black mb-4 tracking-irc-tight">
           Emergency Response Navigator
         </h1>
-        <p className="text-irc-gray-500 max-w-2xl mx-auto leading-relaxed">
+        <p className="text-base text-irc-gray-500 max-w-2xl mx-auto leading-relaxed">
           Navigate the response process, find resources, and get AI guidance.
           Built on IRC's Emergency Management Guidelines v2.0 and the Emergency Roadmap.
         </p>
       </div>
 
       {/* Quick Start — single row combining nav + stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14">
         <Link
           to="/navigator"
           className="card p-5 hover:shadow-md transition-shadow group"
@@ -72,7 +72,7 @@ export default function Home() {
       </div>
 
       {/* Classification Quick Start */}
-      <div className="card p-5 mb-8">
+      <div className="card p-5 mb-10">
         <h2 className="font-bold text-black mb-3 tracking-irc-tight">Start by Classification</h2>
         <p className="text-sm text-irc-gray-500 mb-4">
           Select your emergency classification to see the relevant tasks:
@@ -120,7 +120,7 @@ export default function Home() {
       </div>
 
       {/* Response Phases Overview */}
-      <div className="card p-5 mb-8">
+      <div className="card p-5 mb-10">
         <h2 className="font-bold text-black mb-4 tracking-irc-tight">Response Phases</h2>
         <div className="space-y-3">
           {phases.map(phase => (
@@ -170,10 +170,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer info */}
-      <div className="mt-8 text-center text-xs text-irc-gray-400">
-        <p>Based on IRC Emergency Management Guidelines v2.0 (Aug 2025)</p>
-        <p className="mt-1">
+      {/* Stats footer */}
+      <div className="mt-10 text-center text-xs text-irc-gray-400">
+        <p>
           {totalSearchable.toLocaleString()} knowledge chunks · {metadata.totalDownloadedDocs} indexed documents
           {' · '}Built {new Date(metadata.buildDate).toLocaleDateString()}
         </p>

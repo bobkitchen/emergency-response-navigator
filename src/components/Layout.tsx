@@ -18,6 +18,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col">
+      {/* IRC signature yellow accent bar */}
+      <div className="h-1 bg-irc-yellow shrink-0" />
+
       {/* Header — IRC black bar with yellow accents */}
       <header className="bg-black text-white shadow-md sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -116,6 +119,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Settings Modal */}
       <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
+
+      {/* Footer */}
+      <footer className="bg-irc-gray-50 border-t border-irc-gray-200 py-4 mt-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-irc-gray-500">
+          <div className="flex items-center gap-2">
+            <img src={ircLogoIcon} alt="IRC" className="h-5 w-5 opacity-60" />
+            <span>Emergency Response Navigator</span>
+          </div>
+          <span>Based on IRC Emergency Management Guidelines v2.0</span>
+        </div>
+      </footer>
     </div>
   );
 }

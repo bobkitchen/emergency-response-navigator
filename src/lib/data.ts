@@ -75,8 +75,8 @@ export function getPhaseColorLight(phaseId: string): string {
 
 export function getPriorityColor(priority: string): string {
   const colors: Record<string, string> = {
-    key: 'bg-red-100 text-irc-crisis-red',
-    high: 'bg-amber-100 text-amber-800',
+    key: 'bg-yellow-100 text-yellow-800',
+    high: 'bg-yellow-50 text-yellow-800',
     medium: 'bg-irc-gray-100 text-irc-gray-700',
     low: 'bg-irc-gray-50 text-irc-gray-500',
   };
