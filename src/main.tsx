@@ -19,7 +19,7 @@ import './index.css';
 // Register service worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/emergency-navigator/sw.js').catch(() => {
+    navigator.serviceWorker.register('/emergency-response-navigator/sw.js').catch(() => {
       // SW registration failed, app works fine without it
     });
   });
@@ -27,7 +27,7 @@ if ('serviceWorker' in navigator) {
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter basename="/emergency-navigator">
+    <BrowserRouter basename="/emergency-response-navigator">
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
