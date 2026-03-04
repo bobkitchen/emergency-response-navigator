@@ -8,7 +8,6 @@ interface Props {
 
 const TIER_LABELS: Record<ModelOption['tier'], { label: string; color: string; desc: string }> = {
   standard: { label: '● Standard', color: 'text-blue-600', desc: 'Great balance of quality and cost' },
-  free: { label: '◇ Free', color: 'text-gray-500', desc: 'No cost, rate limited' },
 };
 
 export default function SettingsModal({ isOpen, onClose }: Props) {

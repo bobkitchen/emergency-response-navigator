@@ -57,13 +57,12 @@ Response Management, Finance, People & Culture, Supply Chain, Safety & Security,
 export interface ModelOption {
   id: string;
   name: string;
-  tier: 'standard' | 'free';
+  tier: 'standard';
   description: string;
 }
 
 export const MODELS: ModelOption[] = [
   { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', tier: 'standard', description: 'Fast, high quality — fractions of a cent per query' },
-  { id: 'google/gemma-3-27b-it:free', name: 'Gemma 3 27B (Free)', tier: 'free', description: 'No cost, rate limited (200 req/day)' },
 ];
 
 export const DEFAULT_MODEL = 'google/gemini-2.5-flash';
