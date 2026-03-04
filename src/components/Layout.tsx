@@ -55,10 +55,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <button
                 onClick={() => setChatOpen(!chatOpen)}
                 className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-irc-yellow text-black hover:bg-irc-yellow-light transition-colors"
-                title="AI Advisor"
+                title="Ask Albert"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span className="hidden sm:inline font-bold">AI Advisor</span>
+                <span className="hidden sm:inline font-bold">Ask Albert</span>
               </button>
               <button
                 onClick={() => setSettingsOpen(true)}

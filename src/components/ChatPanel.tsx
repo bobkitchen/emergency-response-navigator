@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { streamChat, getApiKey } from '@/lib/chat';
 import type { ChatMessage } from '@/types';
+import albertAvatar from '@/assets/albert.png';
 
 interface Props {
   isOpen: boolean;
@@ -122,9 +123,12 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-irc-gray-200 bg-irc-gray-50">
-          <div>
-            <h3 className="font-bold text-sm text-black tracking-irc-tight">AI Advisor</h3>
-            <p className="text-xs text-irc-gray-500">Ask about the emergency response process</p>
+          <div className="flex items-center gap-2">
+            <img src={albertAvatar} alt="Albert" className="w-6 h-6 rounded-full object-cover" />
+            <div>
+              <h3 className="font-bold text-sm text-black tracking-irc-tight">Ask Albert</h3>
+              <p className="text-xs text-irc-gray-500">Your IRC emergency response guide</p>
+            </div>
           </div>
           <div className="flex items-center gap-1">
             {messages.length > 0 && (
@@ -159,7 +163,7 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
                 <button onClick={onOpenSettings} className="underline font-medium">
                   Settings
                 </button>{' '}
-                to use the AI Advisor. Free models available.
+                to use Ask Albert. Free models available.
               </p>
             </div>
           )}
@@ -185,27 +189,26 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
               key={msg.id}
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <div
-                className={`max-w-[85%] rounded-lg px-3 py-2 text-sm ${
-                  msg.role === 'user'
-                    ? 'bg-black text-white'
-                    : 'bg-irc-gray-50 text-black'
-                }`}
-              >
-                {msg.role === 'assistant' ? (
-                  <div className="chat-content">
-                    <ReactMarkdown
-                      components={{
-                        a: ({ href, children, ...props }) => (
-                          <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>
-                        ),
-                      }}
-                    >{msg.content || '...'}</ReactMarkdown>
+              {msg.role === 'assistant' ? (
+                <div className="flex gap-2 max-w-[85%]">
+                  <img src={albertAvatar} alt="Albert" className="w-7 h-7 rounded-full object-cover flex-shrink-0 self-start" />
+                  <div className="rounded-lg px-3 py-2 text-sm bg-irc-gray-50 text-black">
+                    <div className="chat-content">
+                      <ReactMarkdown
+                        components={{
+                          a: ({ href, children, ...props }) => (
+                            <a href={href} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>
+                          ),
+                        }}
+                      >{msg.content || '...'}</ReactMarkdown>
+                    </div>
                   </div>
-                ) : (
+                </div>
+              ) : (
+                <div className="max-w-[85%] rounded-lg px-3 py-2 text-sm bg-black text-white">
                   <p className="whitespace-pre-wrap">{msg.content}</p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           ))}
 

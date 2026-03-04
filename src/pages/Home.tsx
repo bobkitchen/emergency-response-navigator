@@ -59,13 +59,13 @@ export default function Home() {
         {/* AI Advisor — white accent card */}
         <div
           className="bg-white rounded-xl border-l-4 border-irc-yellow shadow-sm p-5 hover:-translate-y-0.5 hover:shadow-lg transition-all group cursor-pointer"
-          onClick={() => document.querySelector<HTMLButtonElement>('[title="AI Advisor"]')?.click()}
+          onClick={() => document.querySelector<HTMLButtonElement>('[title="Ask Albert"]')?.click()}
         >
           <div className="w-10 h-10 rounded-lg bg-irc-gray-100 flex items-center justify-center mb-3">
             <MessageCircle className="w-5 h-5 text-irc-gray-700" />
           </div>
           <h3 className="font-bold text-black group-hover:text-irc-gray-700 transition-colors tracking-irc-tight">
-            AI Advisor
+            Ask Albert
           </h3>
           <p className="text-sm text-irc-gray-500 mt-1">
             AI-powered Q&A backed by {metadata.totalDownloadedDocs} indexed documents

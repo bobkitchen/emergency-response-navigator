@@ -127,7 +127,7 @@ export async function* streamChat(
 ): AsyncGenerator<string> {
   const apiKey = getApiKey();
   if (!apiKey) {
-    yield 'Please set your OpenRouter API key in Settings to use the AI Advisor.';
+    yield 'Please set your OpenRouter API key in Settings to use Ask Albert.';
     return;
   }
 
