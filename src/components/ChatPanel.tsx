@@ -125,9 +125,7 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
         <div className={`flex items-start justify-between px-4 ${messages.length === 0 ? 'py-4' : 'py-3'} border-b border-irc-gray-200 bg-irc-gray-50`}>
           <div className="flex items-start gap-3">
             {messages.length === 0 ? (
-              <div className="albert-ring w-16 h-16 rounded-full ring-2 ring-irc-yellow ring-offset-2 overflow-hidden flex-shrink-0">
-                <img src={albertAvatar} alt="Albert" className="w-full h-full object-cover" />
-              </div>
+              <img src={albertAvatar} alt="Albert" className="w-28 h-28 object-contain flex-shrink-0 -my-2" />
             ) : (
               <img src={albertAvatar} alt="Albert" className="w-9 h-9 rounded-full object-cover flex-shrink-0 mt-0.5" />
             )}
