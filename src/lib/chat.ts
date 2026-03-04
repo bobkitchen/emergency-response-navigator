@@ -79,7 +79,9 @@ export function setApiKey(key: string) {
 }
 
 export function getModel(): string {
-  return localStorage.getItem('ern-model') || DEFAULT_MODEL;
+  const stored = localStorage.getItem('ern-model');
+  if (stored && MODELS.some(m => m.id === stored)) return stored;
+  return DEFAULT_MODEL;
 }
 
 export function setModel(model: string) {
