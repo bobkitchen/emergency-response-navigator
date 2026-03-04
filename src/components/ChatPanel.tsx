@@ -127,7 +127,7 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
             {messages.length === 0 ? (
               <img src={albertAvatar} alt="Albert" className="w-20 flex-shrink-0 object-contain -mb-3" />
             ) : (
-              <img src={albertAvatar} alt="Albert" className="w-9 h-9 rounded-full object-cover flex-shrink-0 mt-0.5" />
+              <img src={albertAvatar} alt="Albert" className="w-9 h-9 object-contain flex-shrink-0 mt-0.5" />
             )}
             <div className="min-w-0">
               <h3 className={`font-bold text-black tracking-irc-tight ${messages.length === 0 ? 'text-lg' : 'text-sm'}`}>Ask Albert</h3>
