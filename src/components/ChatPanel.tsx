@@ -124,7 +124,7 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-irc-gray-200 bg-irc-gray-50">
           <div className="flex items-center gap-2">
-            <img src={albertAvatar} alt="Albert" className="w-6 h-6 rounded-full object-cover" />
+            <img src={albertAvatar} alt="Albert" className="w-9 h-9 rounded-full object-cover" />
             <div>
               <h3 className="font-bold text-sm text-black tracking-irc-tight">Ask Albert</h3>
               <p className="text-xs text-irc-gray-500">Your IRC emergency response guide</p>
@@ -190,8 +190,8 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
               className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               {msg.role === 'assistant' ? (
-                <div className="flex gap-2 max-w-[85%]">
-                  <img src={albertAvatar} alt="Albert" className="w-7 h-7 rounded-full object-cover flex-shrink-0 self-start" />
+                <div className="flex gap-2.5 max-w-[85%]">
+                  <img src={albertAvatar} alt="Albert" className="w-9 h-9 rounded-full object-cover flex-shrink-0 self-start" />
                   <div className="rounded-lg px-3 py-2 text-sm bg-irc-gray-50 text-black">
                     <div className="chat-content">
                       <ReactMarkdown

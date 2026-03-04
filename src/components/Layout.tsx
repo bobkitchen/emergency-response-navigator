@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import ChatPanel from './ChatPanel';
 import SettingsModal from './SettingsModal';
 import ircLogoIcon from '@/assets/irc-logo-icon.svg';
-import { MessageCircle } from 'lucide-react';
+import albertAvatar from '@/assets/albert.png';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Home' },
@@ -57,7 +57,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-irc-yellow text-black hover:bg-irc-yellow-light transition-colors"
                 title="Ask Albert"
               >
-                <MessageCircle className="w-4 h-4" />
+                <img src={albertAvatar} alt="" className="w-5 h-5 rounded-full object-cover" />
                 <span className="hidden sm:inline font-bold">Ask Albert</span>
               </button>
               <button
