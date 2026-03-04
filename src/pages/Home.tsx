@@ -1,9 +1,8 @@
 import { Link } from 'react-router-dom';
 import { processData } from '@/lib/data';
 import searchChunksData from '@/data/search-chunks.json';
-import ircLogoFull from '@/assets/irc-logo-full.svg';
 import SectorIcon from '@/components/SectorIcon';
-import { Compass, Library, MessageCircle, ArrowRight } from 'lucide-react';
+import { Compass, Library, MessageCircle } from 'lucide-react';
 
 export default function Home() {
   const { metadata, sectors, phases } = processData;
@@ -13,7 +12,6 @@ export default function Home() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Hero */}
       <div className="text-center mb-16 sm:mb-20">
-        <img src={ircLogoFull} alt="International Rescue Committee" className="h-16 mx-auto mb-6" />
         <h1 className="text-3xl sm:text-5xl font-bold text-black mb-4 tracking-irc-tight">
           Emergency Response Navigator
         </h1>
@@ -26,21 +24,20 @@ export default function Home() {
 
       {/* Quick Start — bold card trio */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14">
-        {/* Process Navigator — BLACK hero card */}
+        {/* Process Navigator — white accent card */}
         <Link
           to="/navigator"
-          className="bg-black text-white rounded-xl p-5 hover:bg-irc-gray-700 transition-all group"
+          className="bg-white rounded-xl border-l-4 border-irc-yellow shadow-sm p-5 hover:-translate-y-0.5 hover:shadow-lg transition-all group"
         >
-          <div className="w-10 h-10 rounded-lg bg-irc-yellow flex items-center justify-center mb-3">
-            <Compass className="w-5 h-5 text-black" />
+          <div className="w-10 h-10 rounded-lg bg-irc-gray-100 flex items-center justify-center mb-3">
+            <Compass className="w-5 h-5 text-irc-gray-700" />
           </div>
-          <h3 className="font-bold text-white group-hover:text-irc-yellow transition-colors tracking-irc-tight">
+          <h3 className="font-bold text-black group-hover:text-irc-gray-700 transition-colors tracking-irc-tight">
             Process Navigator
           </h3>
-          <p className="text-sm text-irc-gray-400 mt-1">
+          <p className="text-sm text-irc-gray-500 mt-1">
             {metadata.totalTasks} tasks across {metadata.totalSectors} sectors and {phases.length} response phases
           </p>
-          <ArrowRight className="w-4 h-4 text-irc-yellow mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
         </Link>
 
         {/* Resource Library — white accent card */}

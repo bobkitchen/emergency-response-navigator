@@ -41,8 +41,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   to={item.path}
                   className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                     location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path))
-                      ? 'bg-irc-yellow text-black'
-                      : 'text-irc-gray-200 hover:bg-irc-gray-700 hover:text-white'
+                      ? 'bg-irc-yellow text-black font-bold'
+                      : 'text-irc-gray-200 hover:bg-irc-gray-700 hover:text-white font-bold'
                   }`}
                 >
                   {item.label}
@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 title="AI Advisor"
               >
                 <MessageCircle className="w-4 h-4" />
-                <span className="hidden sm:inline">AI Advisor</span>
+                <span className="hidden sm:inline font-bold">AI Advisor</span>
               </button>
               <button
                 onClick={() => setSettingsOpen(true)}
