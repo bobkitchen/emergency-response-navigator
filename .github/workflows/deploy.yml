@@ -26,7 +26,14 @@ jobs:
       - run: npm ci
       - run: npx vite build
       - name: Encrypt site with password
-        run: npx staticrypt dist/index.html -p "${{ secrets.SITE_PASSWORD }}" --short -d dist
+        run: >-
+          npx staticrypt dist/index.html
+          -p "${{ secrets.SITE_PASSWORD }}"
+          --short
+          -d dist
+          -t password_template.html
+          --template-title "Emergency Response Navigator"
+          --template-instructions "Enter the password to access the site."
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

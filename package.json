@@ -8,7 +8,7 @@
     "build": "node scripts/build-data.mjs && tsc -b && vite build",
     "build:data": "node scripts/build-data.mjs",
     "preview": "vite preview",
-    "build:protected": "npm run build && npx staticrypt dist/index.html -p ${SITE_PASSWORD:-changeme} --short -d dist"
+    "build:protected": "npm run build && npx staticrypt dist/index.html -p ${SITE_PASSWORD:-changeme} --short -d dist -t password_template.html --template-title 'Emergency Response Navigator' --template-instructions 'Enter the password to access the site.'"
   },
   "dependencies": {
     "@orama/orama": "^3.0.0",
