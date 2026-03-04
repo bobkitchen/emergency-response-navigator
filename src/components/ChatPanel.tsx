@@ -122,15 +122,27 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-4 py-3 border-b border-irc-gray-200 bg-irc-gray-50">
-          <div className="flex items-center gap-2">
-            <img src={albertAvatar} alt="Albert" className="w-10 h-10 rounded-full object-cover" />
-            <div>
-              <h3 className="font-bold text-sm text-black tracking-irc-tight">Ask Albert</h3>
-              <p className="text-xs text-irc-gray-500">Your IRC emergency response guide</p>
+        <div className={`flex items-start justify-between px-4 ${messages.length === 0 ? 'py-4' : 'py-3'} border-b border-irc-gray-200 bg-irc-gray-50`}>
+          <div className="flex items-start gap-3">
+            {messages.length === 0 ? (
+              <div className="albert-ring w-16 h-16 rounded-full ring-2 ring-irc-yellow ring-offset-2 overflow-hidden flex-shrink-0">
+                <img src={albertAvatar} alt="Albert" className="w-full h-full object-cover" />
+              </div>
+            ) : (
+              <img src={albertAvatar} alt="Albert" className="w-9 h-9 rounded-full object-cover flex-shrink-0 mt-0.5" />
+            )}
+            <div className="min-w-0">
+              <h3 className={`font-bold text-black tracking-irc-tight ${messages.length === 0 ? 'text-lg' : 'text-sm'}`}>Ask Albert</h3>
+              {messages.length === 0 ? (
+                <p className="text-xs text-irc-gray-500 mt-1 leading-relaxed">
+                  Your AI-powered guide to IRC's emergency response tools, templates, and ways of working. Albert knows it all. Don't worry about how you ask — Albert will figure it out and direct you to the right documents and next steps.
+                </p>
+              ) : (
+                <p className="text-xs text-irc-gray-500">Your IRC emergency response guide</p>
+              )}
             </div>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 flex-shrink-0">
             {messages.length > 0 && (
               <button
                 onClick={() => setMessages([])}
@@ -169,29 +181,18 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
           )}
 
           {messages.length === 0 && (
-            <div className="flex flex-col items-center pt-6 pb-4">
-              {/* Hero avatar with yellow ring */}
-              <div className="relative mb-4">
-                <div className="albert-ring w-20 h-20 rounded-full ring-2 ring-irc-yellow ring-offset-2 overflow-hidden">
-                  <img src={albertAvatar} alt="Albert" className="w-full h-full object-cover" />
-                </div>
-              </div>
-              <h3 className="text-base font-bold text-black tracking-irc-tight">Ask Albert</h3>
-              <p className="text-xs text-irc-gray-500 mt-0.5 mb-5">Your IRC emergency response guide</p>
-
-              <div className="w-full space-y-2">
-                <p className="text-xs text-irc-gray-400 uppercase tracking-wide font-medium">Try asking</p>
-                {EXAMPLE_QUERIES.map((q, i) => (
-                  <button
-                    key={i}
-                    onClick={() => sendMessage(q)}
-                    disabled={!hasApiKey}
-                    className="block w-full text-left px-3 py-2 rounded-lg border border-irc-gray-200 text-sm text-irc-gray-700 hover:bg-yellow-50 hover:border-irc-yellow transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
+            <div className="space-y-2 pt-2">
+              <p className="text-xs text-irc-gray-400 uppercase tracking-wide font-medium">Try asking</p>
+              {EXAMPLE_QUERIES.map((q, i) => (
+                <button
+                  key={i}
+                  onClick={() => sendMessage(q)}
+                  disabled={!hasApiKey}
+                  className="block w-full text-left px-3 py-2 rounded-lg border border-irc-gray-200 text-sm text-irc-gray-700 hover:bg-yellow-50 hover:border-irc-yellow transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {q}
+                </button>
+              ))}
             </div>
           )}
 
