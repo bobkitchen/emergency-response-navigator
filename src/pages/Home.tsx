@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
-import { processData, getSectorIcon } from '@/lib/data';
+import { processData } from '@/lib/data';
 import searchChunksData from '@/data/search-chunks.json';
 import ircLogoFull from '@/assets/irc-logo-full.svg';
+import SectorIcon from '@/components/SectorIcon';
+import { Compass, Library, MessageCircle, ArrowRight } from 'lucide-react';
 
 export default function Home() {
   const { metadata, sectors, phases } = processData;
@@ -10,42 +12,44 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
       {/* Hero */}
-      <div className="text-center mb-14">
+      <div className="text-center mb-16 sm:mb-20">
         <img src={ircLogoFull} alt="International Rescue Committee" className="h-16 mx-auto mb-6" />
-        <h1 className="text-2xl sm:text-3xl font-bold text-black mb-4 tracking-irc-tight">
+        <h1 className="text-3xl sm:text-5xl font-bold text-black mb-4 tracking-irc-tight">
           Emergency Response Navigator
         </h1>
-        <p className="text-base text-irc-gray-500 max-w-2xl mx-auto leading-relaxed">
+        <span className="block h-1 w-20 bg-irc-yellow mx-auto mt-4" />
+        <p className="text-lg text-irc-gray-500 max-w-2xl mx-auto leading-relaxed mt-6">
           Navigate the response process, find resources, and get AI guidance.
           Built on IRC's Emergency Management Guidelines v2.0 and the Emergency Roadmap.
         </p>
       </div>
 
-      {/* Quick Start — single row combining nav + stats */}
+      {/* Quick Start — bold card trio */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-14">
+        {/* Process Navigator — BLACK hero card */}
         <Link
           to="/navigator"
-          className="card p-5 hover:shadow-md transition-shadow group"
+          className="bg-black text-white rounded-xl p-5 hover:bg-irc-gray-700 transition-all group"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">🗺️</span>
-            <span className="text-2xl font-bold text-irc-gray-200 group-hover:text-irc-yellow transition-colors">{metadata.totalTasks}</span>
+          <div className="w-10 h-10 rounded-lg bg-irc-yellow flex items-center justify-center mb-3">
+            <Compass className="w-5 h-5 text-black" />
           </div>
-          <h3 className="font-bold text-black group-hover:text-irc-gray-700 transition-colors tracking-irc-tight">
+          <h3 className="font-bold text-white group-hover:text-irc-yellow transition-colors tracking-irc-tight">
             Process Navigator
           </h3>
-          <p className="text-sm text-irc-gray-500 mt-1">
+          <p className="text-sm text-irc-gray-400 mt-1">
             {metadata.totalTasks} tasks across {metadata.totalSectors} sectors and {phases.length} response phases
           </p>
+          <ArrowRight className="w-4 h-4 text-irc-yellow mt-3 opacity-0 group-hover:opacity-100 transition-opacity" />
         </Link>
 
+        {/* Resource Library — white accent card */}
         <Link
           to="/resources"
-          className="card p-5 hover:shadow-md transition-shadow group"
+          className="bg-white rounded-xl border-l-4 border-irc-yellow shadow-sm p-5 hover:-translate-y-0.5 hover:shadow-lg transition-all group"
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">📚</span>
-            <span className="text-2xl font-bold text-irc-gray-200 group-hover:text-irc-yellow transition-colors">{metadata.totalResourcesWithUrls}</span>
+          <div className="w-10 h-10 rounded-lg bg-irc-gray-100 flex items-center justify-center mb-3">
+            <Library className="w-5 h-5 text-irc-gray-700" />
           </div>
           <h3 className="font-bold text-black group-hover:text-irc-gray-700 transition-colors tracking-irc-tight">
             Resource Library
@@ -55,12 +59,13 @@ export default function Home() {
           </p>
         </Link>
 
-        <div className="card p-5 hover:shadow-md transition-shadow group cursor-pointer"
+        {/* AI Advisor — white accent card */}
+        <div
+          className="bg-white rounded-xl border-l-4 border-irc-yellow shadow-sm p-5 hover:-translate-y-0.5 hover:shadow-lg transition-all group cursor-pointer"
           onClick={() => document.querySelector<HTMLButtonElement>('[title="AI Advisor"]')?.click()}
         >
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-2xl">💬</span>
-            <span className="text-2xl font-bold text-irc-gray-200 group-hover:text-irc-yellow transition-colors">{totalSearchable.toLocaleString()}</span>
+          <div className="w-10 h-10 rounded-lg bg-irc-gray-100 flex items-center justify-center mb-3">
+            <MessageCircle className="w-5 h-5 text-irc-gray-700" />
           </div>
           <h3 className="font-bold text-black group-hover:text-irc-gray-700 transition-colors tracking-irc-tight">
             AI Advisor
@@ -119,15 +124,15 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Response Phases Overview */}
+      {/* Response Phases Overview — 2-col grid, compact */}
       <div className="card p-5 mb-10">
         <h2 className="font-bold text-black mb-4 tracking-irc-tight">Response Phases</h2>
-        <div className="space-y-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {phases.map(phase => (
             <Link
               key={phase.id}
               to={`/navigator?phase=${phase.id}`}
-              className="flex items-start gap-3 p-3 rounded-lg hover:bg-irc-gray-50 transition-colors"
+              className="flex items-center gap-3 p-3 rounded-lg hover:bg-irc-gray-50 transition-colors"
             >
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 ${
                 phase.id === 'R1' ? 'bg-irc-crisis-red' :
@@ -142,7 +147,6 @@ export default function Home() {
               </div>
               <div>
                 <p className="font-medium text-sm text-black">{phase.id}: {phase.name}</p>
-                <p className="text-xs text-irc-gray-500 mt-0.5">{phase.description}</p>
                 <p className="text-xs text-irc-gray-400 mt-0.5">{phase.timeline}</p>
               </div>
             </Link>
@@ -160,7 +164,7 @@ export default function Home() {
               to={`/navigator/${sector.id}`}
               className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-irc-gray-200 hover:border-irc-yellow hover:bg-yellow-50 transition-colors"
             >
-              <span className="text-lg">{getSectorIcon(sector.id)}</span>
+              <SectorIcon sectorId={sector.id} className="w-4 h-4 text-irc-gray-500" />
               <div className="min-w-0">
                 <p className="text-sm font-medium text-irc-gray-700 truncate">{sector.name}</p>
                 <p className="text-xs text-irc-gray-400">{sector.tasks.length} tasks</p>

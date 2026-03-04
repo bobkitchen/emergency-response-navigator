@@ -28,7 +28,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Arial', 'Helvetica', 'sans-serif'],
+        sans: ['"DM Sans"', 'Arial', 'Helvetica', 'sans-serif'],
       },
       letterSpacing: {
         'irc-tight': '-0.02em',

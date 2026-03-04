@@ -114,7 +114,7 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
             disabled={saved}
             className={`w-full py-2 rounded-md text-sm font-bold transition-colors ${
               saved
-                ? 'bg-green-500 text-white'
+                ? 'bg-black text-irc-yellow'
                 : 'bg-irc-yellow text-black hover:bg-irc-yellow-light'
             }`}
           >

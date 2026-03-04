@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { processData } from '@/lib/data';
 import resourceIndex from '@/data/resource-index.json';
+import { FileText, Sheet, Presentation, Archive, File, Paperclip } from 'lucide-react';
 
 interface ResourceEntry {
   name: string;
@@ -105,14 +106,15 @@ function guessFileType(url: string, name: string): string {
   return '';
 }
 
-function getFileIcon(fileType?: string): string {
+function getFileIcon(fileType?: string): React.ReactNode {
+  const base = 'w-5 h-5 shrink-0';
   switch (fileType) {
-    case 'pdf': return '📕';
-    case 'docx': case 'doc': return '📄';
-    case 'xlsx': case 'xlsm': case 'xls': return '📊';
-    case 'pptx': case 'ppt': return '📑';
-    case 'zip': return '📦';
-    default: return '📎';
+    case 'pdf': return <FileText className={`${base} text-red-600`} />;
+    case 'docx': case 'doc': return <FileText className={`${base} text-blue-600`} />;
+    case 'xlsx': case 'xlsm': case 'xls': return <Sheet className={`${base} text-green-600`} />;
+    case 'pptx': case 'ppt': return <Presentation className={`${base} text-orange-500`} />;
+    case 'zip': return <Archive className={`${base} text-irc-gray-500`} />;
+    default: return <File className={`${base} text-irc-gray-400`} />;
   }
 }
 
@@ -218,7 +220,7 @@ export default function Resources() {
         {filtered.map((r, idx) => (
           <div key={`${r.name}-${idx}`} className="card p-3 hover:shadow-sm transition-shadow">
             <div className="flex items-start gap-3">
-              <span className="text-xl shrink-0 mt-0.5">{getFileIcon(r.fileType)}</span>
+              <span className="shrink-0 mt-0.5">{getFileIcon(r.fileType)}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">

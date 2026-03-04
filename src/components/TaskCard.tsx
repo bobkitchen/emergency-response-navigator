@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { Task } from '@/types';
 import { getPhaseColorLight, getPriorityColor } from '@/lib/data';
+import { Star, ExternalLink, Paperclip } from 'lucide-react';
 
 interface Props {
   task: Task;
@@ -47,7 +48,7 @@ export default function TaskCard({ task, showSector, sectorName }: Props) {
             {/* Priority */}
             {(task.priority === 'key' || task.priority === 'high') && (
               <span className={`badge ${getPriorityColor(task.priority)}`}>
-                {task.keyMilestone ? '⭐ Key Milestone' : task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+                {task.keyMilestone ? <><Star className="w-3 h-3 fill-current" /> Key Milestone</> : task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
               </span>
             )}
 
@@ -107,11 +108,11 @@ export default function TaskCard({ task, showSector, sectorName }: Props) {
                     res.url && (res.url.startsWith('http') || res.url.startsWith('mailto')) ? (
                       <a key={idx} href={res.url} target="_blank" rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-xs text-irc-gray-700 hover:text-black underline decoration-irc-gray-300 hover:decoration-black">
-                        🔗 {res.name}
+                        <ExternalLink className="w-3 h-3" /> {res.name}
                       </a>
                     ) : (
                       <span key={idx} className="inline-flex items-center gap-1 text-xs text-irc-gray-500">
-                        📎 {res.name}
+                        <Paperclip className="w-3 h-3" /> {res.name}
                       </span>
                     )
                   )}

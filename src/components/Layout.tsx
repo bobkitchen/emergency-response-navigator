@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import ChatPanel from './ChatPanel';
 import SettingsModal from './SettingsModal';
 import ircLogoIcon from '@/assets/irc-logo-icon.svg';
+import { MessageCircle } from 'lucide-react';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Home' },
@@ -56,7 +57,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-irc-yellow text-black hover:bg-irc-yellow-light transition-colors"
                 title="AI Advisor"
               >
-                <span>💬</span>
+                <MessageCircle className="w-4 h-4" />
                 <span className="hidden sm:inline">AI Advisor</span>
               </button>
               <button

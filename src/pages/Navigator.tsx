@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { processData, filterTasks, getSectorIcon } from '@/lib/data';
+import { processData, filterTasks } from '@/lib/data';
+import SectorIcon from '@/components/SectorIcon';
 import type { Filters, Classification, OfficeType, Priority } from '@/types';
 import PhaseTimeline from '@/components/PhaseTimeline';
 import FilterBar from '@/components/FilterBar';
@@ -78,7 +79,7 @@ export default function Navigator() {
           <h1 className="text-xl sm:text-2xl font-bold text-black tracking-irc-tight">
             {activeSector ? (
               <span className="flex items-center gap-2">
-                <span>{getSectorIcon(activeSector.id)}</span>
+                <SectorIcon sectorId={activeSector.id} className="w-5 h-5" />
                 {activeSector.name}
               </span>
             ) : (
@@ -109,7 +110,7 @@ export default function Navigator() {
                 to={`/navigator/${sector.id}`}
                 className="px-3 py-1.5 rounded-full text-xs font-medium border border-irc-gray-200 text-irc-gray-500 hover:border-irc-yellow hover:bg-yellow-50 transition-colors whitespace-nowrap"
               >
-                {getSectorIcon(sector.id)} {sector.name}
+                <SectorIcon sectorId={sector.id} className="w-3.5 h-3.5 inline-block" /> {sector.name}
               </Link>
             ))}
           </div>
@@ -136,7 +137,7 @@ export default function Navigator() {
                     : 'border border-irc-gray-200 text-irc-gray-500 hover:border-irc-yellow hover:bg-yellow-50'
                 }`}
               >
-                {getSectorIcon(sector.id)} {sector.name}
+                <SectorIcon sectorId={sector.id} className="w-3.5 h-3.5 inline-block" /> {sector.name}
               </Link>
             ))}
           </div>
