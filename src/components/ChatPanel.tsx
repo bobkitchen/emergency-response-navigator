@@ -122,14 +122,14 @@ export default function ChatPanel({ isOpen, onClose, onOpenSettings }: Props) {
         }`}
       >
         {/* Header */}
-        <div className={`flex items-start justify-between px-4 ${messages.length === 0 ? 'pt-4 pb-6 relative overflow-hidden min-h-[140px]' : 'py-3'} border-b border-irc-gray-200 bg-irc-gray-50`}>
+        <div className={`flex items-start justify-between px-4 ${messages.length === 0 ? 'py-4' : 'py-3'} border-b border-irc-gray-200 bg-irc-gray-50`}>
           <div className="flex items-start gap-3">
             {messages.length === 0 ? (
-              <img src={albertAvatar} alt="Albert" className="absolute left-0 -bottom-2 h-[130%] w-auto object-contain" />
+              <img src={albertAvatar} alt="Albert" className="w-20 flex-shrink-0 object-contain -mb-3" />
             ) : (
               <img src={albertAvatar} alt="Albert" className="w-9 h-9 rounded-full object-cover flex-shrink-0 mt-0.5" />
             )}
-            <div className={`min-w-0 ${messages.length === 0 ? 'pl-28' : ''}`}>
+            <div className="min-w-0">
               <h3 className={`font-bold text-black tracking-irc-tight ${messages.length === 0 ? 'text-lg' : 'text-sm'}`}>Ask Albert</h3>
               {messages.length === 0 ? (
                 <p className="text-xs text-irc-gray-500 mt-1 leading-relaxed">
