@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getApiKey, setApiKey, getModel, setModel, MODELS, type ModelOption } from '@/lib/chat';
+import { getApiKey, getModel, setModel, MODELS, type ModelOption } from '@/lib/chat';
 
 interface Props {
   isOpen: boolean;
@@ -7,20 +7,16 @@ interface Props {
 }
 
 const TIER_LABELS: Record<ModelOption['tier'], { label: string; color: string; desc: string }> = {
-  premium: { label: '★ Premium', color: 'text-amber-600', desc: 'Best quality, higher cost' },
   standard: { label: '● Standard', color: 'text-blue-600', desc: 'Great balance of quality and cost' },
-  budget: { label: '○ Budget', color: 'text-green-600', desc: 'Very affordable' },
   free: { label: '◇ Free', color: 'text-gray-500', desc: 'No cost, rate limited' },
 };
 
 export default function SettingsModal({ isOpen, onClose }: Props) {
-  const [key, setKey] = useState('');
-  const [selectedModel, setSelectedModel] = useState('anthropic/claude-sonnet-4-6');
+  const [selectedModel, setSelectedModel] = useState('google/gemini-2.5-flash');
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setKey(getApiKey() || '');
       setSelectedModel(getModel());
       setSaved(false);
     }
@@ -29,16 +25,14 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
   if (!isOpen) return null;
 
   const handleSave = () => {
-    setApiKey(key.trim());
     setModel(selectedModel);
     setSaved(true);
     setTimeout(() => onClose(), 800);
   };
 
+  const hasKey = !!getApiKey();
   const selectedModelInfo = MODELS.find(m => m.id === selectedModel);
-
-  // Group models by tier
-  const tiers: ModelOption['tier'][] = ['premium', 'standard', 'budget', 'free'];
+  const tiers: ModelOption['tier'][] = ['standard', 'free'];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -54,25 +48,15 @@ export default function SettingsModal({ isOpen, onClose }: Props) {
         </div>
 
         <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-irc-gray-700 mb-1">
-              OpenRouter API Key
-            </label>
-            <input
-              type="password"
-              value={key}
-              onChange={e => setKey(e.target.value)}
-              placeholder="sk-or-..."
-              className="w-full px-3 py-2 border border-irc-gray-200 rounded-md text-sm focus:ring-2 focus:ring-irc-yellow focus:border-transparent"
-            />
-            <p className="mt-1 text-xs text-irc-gray-500">
-              Get a key at{' '}
-              <a href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer" className="underline text-blue-600 hover:text-blue-800">
-                openrouter.ai/keys
-              </a>
-              . Stored locally in your browser only.
+          {hasKey ? (
+            <p className="text-xs text-green-700 bg-green-50 rounded-md px-3 py-2">
+              API key is pre-configured. No setup needed.
             </p>
-          </div>
+          ) : (
+            <p className="text-xs text-amber-700 bg-amber-50 rounded-md px-3 py-2">
+              No API key configured. Ask the admin for a deployed version or set <code>VITE_OPENROUTER_KEY</code> in your environment.
+            </p>
+          )}
 
           <div>
             <label className="block text-sm font-medium text-irc-gray-700 mb-1">

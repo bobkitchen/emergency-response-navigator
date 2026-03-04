@@ -57,30 +57,13 @@ Response Management, Finance, People & Culture, Supply Chain, Safety & Security,
 export interface ModelOption {
   id: string;
   name: string;
-  tier: 'premium' | 'standard' | 'budget' | 'free';
+  tier: 'standard' | 'free';
   description: string;
 }
 
 export const MODELS: ModelOption[] = [
-  // Premium
-  { id: 'anthropic/claude-opus-4-6', name: 'Claude Opus 4.6', tier: 'premium', description: 'Most capable, best for complex analysis' },
-  { id: 'openai/gpt-4.1', name: 'GPT-4.1', tier: 'premium', description: 'OpenAI flagship, strong reasoning' },
-  { id: 'google/gemini-2.5-pro-preview', name: 'Gemini 2.5 Pro', tier: 'premium', description: 'Google flagship, large context' },
-  // Standard
-  { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', tier: 'standard', description: 'Recommended — very fast, great value' },
-  { id: 'anthropic/claude-sonnet-4-6', name: 'Claude Sonnet 4.6', tier: 'standard', description: 'Excellent quality, fast' },
-  { id: 'openai/gpt-4.1-mini', name: 'GPT-4.1 Mini', tier: 'standard', description: 'Fast and affordable' },
-  { id: 'deepseek/deepseek-chat', name: 'DeepSeek V3', tier: 'standard', description: 'Strong open-source model' },
-  // Budget
-  { id: 'anthropic/claude-haiku-4.5', name: 'Claude Haiku 4.5', tier: 'budget', description: 'Ultra-fast, very cheap' },
-  { id: 'openai/gpt-4.1-nano', name: 'GPT-4.1 Nano', tier: 'budget', description: 'Cheapest OpenAI option' },
-  { id: 'meta-llama/llama-4-maverick', name: 'Llama 4 Maverick', tier: 'budget', description: 'Meta open-source, good value' },
-  // Free
-  { id: 'meta-llama/llama-3.3-70b-instruct:free', name: 'Llama 3.3 70B (Free)', tier: 'free', description: 'Free, strong open-source model' },
-  { id: 'qwen/qwen3-coder:free', name: 'Qwen3 Coder (Free)', tier: 'free', description: 'Free, good for structured tasks' },
-  { id: 'mistralai/mistral-small-3.1-24b-instruct:free', name: 'Mistral Small 3.1 (Free)', tier: 'free', description: 'Free, fast and capable' },
-  { id: 'google/gemma-3-27b-it:free', name: 'Gemma 3 27B (Free)', tier: 'free', description: 'Free, Google open model' },
-  { id: 'nousresearch/hermes-3-llama-3.1-405b:free', name: 'Hermes 3 405B (Free)', tier: 'free', description: 'Free, largest free model' },
+  { id: 'google/gemini-2.5-flash', name: 'Gemini 2.5 Flash', tier: 'standard', description: 'Fast, high quality — fractions of a cent per query' },
+  { id: 'google/gemma-3-27b-it:free', name: 'Gemma 3 27B (Free)', tier: 'free', description: 'No cost, rate limited (200 req/day)' },
 ];
 
 export const DEFAULT_MODEL = 'google/gemini-2.5-flash';
@@ -88,7 +71,7 @@ export const DEFAULT_MODEL = 'google/gemini-2.5-flash';
 // --- Settings helpers ---
 
 export function getApiKey(): string | null {
-  return localStorage.getItem('ern-api-key');
+  return localStorage.getItem('ern-api-key') || import.meta.env.VITE_OPENROUTER_KEY || null;
 }
 
 export function setApiKey(key: string) {
