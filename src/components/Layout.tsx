@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ChatPanel from './ChatPanel';
 import SettingsModal from './SettingsModal';
@@ -10,6 +10,78 @@ const NAV_ITEMS = [
   { path: '/navigator', label: 'Navigator' },
   { path: '/resources', label: 'Resources' },
 ];
+
+// Site config for cross-site navigation
+const isGitHub = typeof window !== 'undefined' && window.location.hostname === 'bobkitchen.github.io';
+
+const SITES = {
+  classification: {
+    label: 'Emergency Classification',
+    shortLabel: 'Classification',
+    description: 'Classify and track emergency responses',
+    url: isGitHub ? '/emergency-classification/' : 'https://bobkitchen.github.io/emergency-classification/',
+  },
+  navigator: {
+    label: 'Response Navigator',
+    shortLabel: 'Navigator',
+    description: 'Emergency response guidance and tasks',
+    url: isGitHub ? '/emergency-response-navigator/' : '/',
+  },
+};
+
+function SiteSwitcher() {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative shrink-0 ml-2">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 px-3 py-1.5 border border-irc-gray-700 rounded-md text-xs font-semibold uppercase tracking-wider text-irc-gray-300 hover:text-white hover:border-irc-gray-500 transition-colors"
+        aria-expanded={open}
+        aria-haspopup="true"
+      >
+        <span>Navigator</span>
+        <svg
+          className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`}
+          fill="none"
+          viewBox="0 0 12 12"
+        >
+          <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="absolute top-full mt-2 left-0 min-w-[260px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+          <a
+            href={SITES.navigator.url}
+            className="block px-4 py-3 bg-amber-50 border-l-[3px] border-l-irc-yellow"
+          >
+            <span className="block text-sm font-bold text-black">{SITES.navigator.label}</span>
+            <span className="block text-xs text-gray-500 mt-0.5">{SITES.navigator.description}</span>
+          </a>
+          <a
+            href={SITES.classification.url}
+            className="block px-4 py-3 hover:bg-gray-50 transition-colors"
+          >
+            <span className="block text-sm font-bold text-black">{SITES.classification.label}</span>
+            <span className="block text-xs text-gray-500 mt-0.5">{SITES.classification.description}</span>
+          </a>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -27,11 +99,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
             {/* Logo / Brand */}
-            <Link to="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0 tracking-irc-tight">
-              <img src={ircLogoIcon} alt="IRC" className="h-8 w-8" />
-              <span className="hidden sm:inline">Emergency Response Navigator</span>
-              <span className="sm:hidden">ERN</span>
-            </Link>
+            <div className="flex items-center">
+              <Link to="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0 tracking-irc-tight">
+                <img src={ircLogoIcon} alt="IRC" className="h-8 w-8" />
+                <span className="hidden sm:inline">Emergency Response Navigator</span>
+                <span className="sm:hidden">ERN</span>
+              </Link>
+              <SiteSwitcher />
+            </div>
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
