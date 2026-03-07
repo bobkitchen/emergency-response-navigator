@@ -95,8 +95,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <header className="bg-black text-white shadow-md sticky top-0 z-40 border-b-4 border-b-irc-yellow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
-            {/* Site Switcher + Logo / Brand */}
-            <div className="flex items-center">
+            {/* Left group: Switcher + Brand */}
+            <div className="flex items-center gap-3">
               <SiteSwitcher />
               <Link to="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0 tracking-irc-tight">
                 <img src={ircLogoIcon} alt="IRC" className="h-8 w-8" />
