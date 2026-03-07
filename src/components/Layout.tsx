@@ -44,7 +44,7 @@ function SiteSwitcher() {
   }, []);
 
   return (
-    <div ref={ref} className="relative shrink-0 ml-2">
+    <div ref={ref} className="relative shrink-0 mr-3">
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center gap-1.5 px-3 py-1.5 border border-irc-gray-700 rounded-md text-xs font-semibold uppercase tracking-wider text-irc-gray-300 hover:text-white hover:border-irc-gray-500 transition-colors"
@@ -91,21 +91,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* IRC signature yellow accent bar */}
-      <div className="h-1 bg-irc-yellow shrink-0" />
-
       {/* Header — IRC black bar with yellow accents */}
-      <header className="bg-black text-white shadow-md sticky top-0 z-40">
+      <header className="bg-black text-white shadow-md sticky top-0 z-40 border-b-4 border-b-irc-yellow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between h-14">
-            {/* Logo / Brand */}
+            {/* Site Switcher + Logo / Brand */}
             <div className="flex items-center">
+              <SiteSwitcher />
               <Link to="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0 tracking-irc-tight">
                 <img src={ircLogoIcon} alt="IRC" className="h-8 w-8" />
                 <span className="hidden sm:inline">Emergency Response Navigator</span>
                 <span className="sm:hidden">ERN</span>
               </Link>
-              <SiteSwitcher />
             </div>
 
             {/* Desktop Nav */}
