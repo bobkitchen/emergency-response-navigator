@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import ChatPanel from './ChatPanel';
 import SettingsModal from './SettingsModal';
 import { MessageCircle } from 'lucide-react';
-import ircLogoIcon from '@/assets/irc-logo-icon.svg';
 
 const NAV_ITEMS = [
   { path: '/', label: 'Home' },
@@ -29,6 +28,12 @@ const SITES = {
   },
 };
 
+// IRC logo SVG — identical to Classification System
+const IRC_LOGO = `data:image/svg+xml,${encodeURIComponent('<svg viewBox="0 0 217 216.99" xmlns="http://www.w3.org/2000/svg"><rect fill="#FDC62F" width="217" height="216.99"/><path fill="#00040C" d="M26.6,26.6h163.81v63.15h-55.22l55.22,55.22v45.44h-45.44l-55.22-55.21v55.21H26.6V26.6Z"/></svg>')}`;
+
+/* ── Site Switcher ──
+   Matches Classification's .site-switcher exactly:
+   position relative, margin-right 12px, toggle is 0.75rem/600/0.04em uppercase */
 function SiteSwitcher() {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -44,44 +49,145 @@ function SiteSwitcher() {
   }, []);
 
   return (
-    <div ref={ref} className="relative shrink-0 mr-3">
+    <div ref={ref} style={{ position: 'relative', marginRight: '12px', flexShrink: 0 }}>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 px-3 py-1.5 border border-irc-gray-700 rounded-md text-xs font-semibold uppercase tracking-wider text-irc-gray-300 hover:text-white hover:border-irc-gray-500 transition-colors"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '6px 12px',
+          border: '1px solid #383838',
+          borderRadius: '6px',
+          background: 'transparent',
+          color: '#D1D1D1',
+          fontFamily: 'inherit',
+          fontSize: '0.75rem',
+          fontWeight: 600,
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase' as const,
+          cursor: 'pointer',
+          transition: 'all 0.15s ease',
+        }}
         aria-expanded={open}
         aria-haspopup="true"
       >
         <span>Navigator</span>
         <svg
-          className={`w-3 h-3 transition-transform ${open ? 'rotate-180' : ''}`}
-          fill="none"
-          viewBox="0 0 12 12"
+          width="12" height="12" viewBox="0 0 12 12" fill="none"
+          style={{ transition: 'transform 0.2s ease', transform: open ? 'rotate(180deg)' : 'none' }}
         >
           <path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
 
       {open && (
-        <div className="absolute top-full mt-2 left-0 min-w-[260px] bg-white border border-gray-200 rounded-xl shadow-xl z-50 overflow-hidden">
+        <div style={{
+          position: 'absolute',
+          top: 'calc(100% + 8px)',
+          left: 0,
+          minWidth: '260px',
+          background: '#FFFFFF',
+          border: '1px solid #E9E9E9',
+          borderRadius: '10px',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.06)',
+          zIndex: 200,
+          overflow: 'hidden',
+        }}>
           <a
             href={SITES.navigator.url}
-            className="block px-4 py-3 bg-amber-50 border-l-[3px] border-l-irc-yellow"
+            style={{
+              display: 'block',
+              padding: '12px 16px',
+              background: '#FFF8E5',
+              borderLeft: '3px solid #FFC72C',
+              textDecoration: 'none',
+            }}
           >
-            <span className="block text-sm font-bold text-black">{SITES.navigator.label}</span>
-            <span className="block text-xs text-gray-500 mt-0.5">{SITES.navigator.description}</span>
+            <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>{SITES.navigator.label}</span>
+            <span style={{ display: 'block', fontSize: '0.75rem', color: '#666', marginTop: '2px', lineHeight: 1.3 }}>{SITES.navigator.description}</span>
           </a>
           <a
             href={SITES.classification.url}
-            className="block px-4 py-3 hover:bg-gray-50 transition-colors"
+            style={{
+              display: 'block',
+              padding: '12px 16px',
+              textDecoration: 'none',
+              transition: 'background 0.12s ease',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#F6F6F6')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
           >
-            <span className="block text-sm font-bold text-black">{SITES.classification.label}</span>
-            <span className="block text-xs text-gray-500 mt-0.5">{SITES.classification.description}</span>
+            <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>{SITES.classification.label}</span>
+            <span style={{ display: 'block', fontSize: '0.75rem', color: '#666', marginTop: '2px', lineHeight: 1.3 }}>{SITES.classification.description}</span>
           </a>
         </div>
       )}
     </div>
   );
 }
+
+/* ── Header styles matching Classification CSS exactly ── */
+const headerStyle: React.CSSProperties = {
+  background: '#000',
+  borderBottom: '4px solid #FFC72C',
+  padding: '0 24px',
+  position: 'sticky',
+  top: 0,
+  zIndex: 100,
+};
+
+const headerInnerStyle: React.CSSProperties = {
+  maxWidth: '1280px',
+  margin: '0 auto',
+  display: 'flex',
+  alignItems: 'center',
+  gap: '16px',
+  height: '60px',
+};
+
+const brandStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '12px',
+  flexShrink: 0,
+  textDecoration: 'none',
+};
+
+const titleStyle: React.CSSProperties = {
+  fontSize: '1rem',
+  fontWeight: 700,
+  letterSpacing: '-0.04em',
+  color: '#FFF',
+  lineHeight: 1.2,
+};
+
+const subtitleStyle: React.CSSProperties = {
+  fontSize: '0.6875rem',
+  fontWeight: 400,
+  letterSpacing: '0.1em',
+  textTransform: 'uppercase',
+  color: '#FFC72C',
+  marginTop: '2px',
+};
+
+const navStyle: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '4px',
+  marginLeft: 'auto',
+};
+
+const navLinkBase: React.CSSProperties = {
+  padding: '8px 14px',
+  borderRadius: '6px',
+  fontSize: '0.8125rem',
+  fontWeight: 700,
+  letterSpacing: '0.04em',
+  textTransform: 'uppercase',
+  textDecoration: 'none',
+  transition: 'all 0.12s ease',
+};
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const location = useLocation();
@@ -91,93 +197,126 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Header — IRC black bar with yellow accents */}
-      <header className="bg-black text-white shadow-md sticky top-0 z-40 border-b-4 border-b-irc-yellow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6">
-          <div className="flex items-center justify-between h-14">
-            {/* Left group: Switcher + Brand */}
-            <div className="flex items-center gap-3">
-              <SiteSwitcher />
-              <Link to="/" className="flex items-center gap-2.5 font-bold text-lg shrink-0 tracking-irc-tight">
-                <img src={ircLogoIcon} alt="IRC" className="h-8 w-8" />
-                <span className="hidden sm:inline">Emergency Response Navigator</span>
-                <span className="sm:hidden">ERN</span>
-              </Link>
-            </div>
+      {/* Header — matching Classification System exactly */}
+      <header style={headerStyle}>
+        <div style={headerInnerStyle}>
+          {/* Site Switcher */}
+          <SiteSwitcher />
 
-            {/* Desktop Nav */}
-            <nav className="hidden md:flex items-center gap-1">
-              {NAV_ITEMS.map(item => (
+          {/* Brand: logo + title/subtitle */}
+          <Link to="/" style={brandStyle}>
+            <img src={IRC_LOGO} alt="IRC" style={{ height: '36px', width: 'auto', display: 'block' }} />
+            <div>
+              <div style={titleStyle}>Emergency Response Navigator</div>
+              <div style={subtitleStyle}>a Global Crisis Analysis project</div>
+            </div>
+          </Link>
+
+          {/* Nav — margin-left: auto pushes it right */}
+          <nav style={navStyle} className="hidden md:flex">
+            {NAV_ITEMS.map(item => {
+              const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+              return (
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path))
-                      ? 'bg-irc-yellow text-black font-bold'
-                      : 'text-irc-gray-200 hover:bg-irc-gray-700 hover:text-white font-bold'
-                  }`}
+                  style={{
+                    ...navLinkBase,
+                    color: isActive ? '#000' : '#D1D1D1',
+                    background: isActive ? '#FFC72C' : 'transparent',
+                  }}
+                  onMouseEnter={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = '#FFF';
+                      e.currentTarget.style.background = '#383838';
+                    }
+                  }}
+                  onMouseLeave={e => {
+                    if (!isActive) {
+                      e.currentTarget.style.color = '#D1D1D1';
+                      e.currentTarget.style.background = 'transparent';
+                    }
+                  }}
                 >
                   {item.label}
                 </Link>
-              ))}
-            </nav>
+              );
+            })}
 
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setChatOpen(!chatOpen)}
-                className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-irc-yellow text-black hover:bg-irc-yellow-light transition-colors"
-                title="Ask Albert"
-              >
-                <MessageCircle className="w-4 h-4" />
-                <span className="hidden sm:inline font-bold">Ask Albert</span>
-              </button>
-              <button
-                onClick={() => setSettingsOpen(true)}
-                className="p-2 rounded-md hover:bg-irc-gray-700 transition-colors"
-                title="Settings"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </button>
-              {/* Mobile menu button */}
-              <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="md:hidden p-2 rounded-md hover:bg-irc-gray-700"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  {mobileMenuOpen ? (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  ) : (
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                  )}
-                </svg>
-              </button>
-            </div>
-          </div>
+            {/* Ask Albert — sits in the nav row, after nav links */}
+            <button
+              onClick={() => setChatOpen(!chatOpen)}
+              style={{
+                ...navLinkBase,
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                color: '#000',
+                background: '#FFC72C',
+                border: 'none',
+                cursor: 'pointer',
+                marginLeft: '8px',
+              }}
+              title="Ask Albert"
+            >
+              <MessageCircle style={{ width: '14px', height: '14px' }} />
+              Ask Albert
+            </button>
+          </nav>
 
-          {/* Mobile Nav */}
-          {mobileMenuOpen && (
-            <nav className="md:hidden pb-3 space-y-1">
-              {NAV_ITEMS.map(item => (
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden"
+            style={{
+              marginLeft: 'auto',
+              padding: '8px',
+              borderRadius: '6px',
+              background: 'transparent',
+              border: 'none',
+              color: '#D1D1D1',
+              cursor: 'pointer',
+            }}
+          >
+            <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Nav */}
+        {mobileMenuOpen && (
+          <nav style={{ paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px' }}>
+            {NAV_ITEMS.map(item => {
+              const isActive = location.pathname === item.path;
+              return (
                 <Link
                   key={item.path}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block px-3 py-2 rounded-md text-sm font-medium ${
-                    location.pathname === item.path
-                      ? 'bg-irc-yellow text-black'
-                      : 'text-irc-gray-200 hover:bg-irc-gray-700'
-                  }`}
+                  style={{
+                    display: 'block',
+                    padding: '8px 14px',
+                    borderRadius: '6px',
+                    fontSize: '0.8125rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    textDecoration: 'none',
+                    color: isActive ? '#000' : '#D1D1D1',
+                    background: isActive ? '#FFC72C' : 'transparent',
+                  }}
                 >
                   {item.label}
                 </Link>
-              ))}
-            </nav>
-          )}
-        </div>
+              );
+            })}
+          </nav>
+        )}
       </header>
 
       {/* Main content area */}
@@ -197,7 +336,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <footer className="bg-irc-gray-50 border-t border-irc-gray-200 py-4 mt-auto">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between text-xs text-irc-gray-500">
           <div className="flex items-center gap-2">
-            <img src={ircLogoIcon} alt="IRC" className="h-5 w-5 opacity-60" />
+            <img src={IRC_LOGO} alt="IRC" style={{ height: '20px', width: 'auto', opacity: 0.6 }} />
             <span>Emergency Response Navigator</span>
           </div>
           <span>Based on IRC Emergency Management Guidelines v2.0</span>
