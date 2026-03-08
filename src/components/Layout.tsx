@@ -49,9 +49,10 @@ function SiteSwitcher() {
   }, []);
 
   return (
-    <div ref={ref} style={{ position: 'relative', marginRight: '12px', flexShrink: 0 }}>
+    <div ref={ref} className="nav-switcher-wrap" style={{ position: 'relative', marginRight: '12px', flexShrink: 0 }}>
       <button
         onClick={() => setOpen(!open)}
+        className="nav-switcher-btn"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -72,7 +73,7 @@ function SiteSwitcher() {
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <span>Navigator</span>
+        <span className="nav-switcher-label">Navigator</span>
         <svg
           width="12" height="12" viewBox="0 0 12 12" fill="none"
           style={{ transition: 'transform 0.2s ease', transform: open ? 'rotate(180deg)' : 'none' }}
@@ -125,6 +126,37 @@ function SiteSwitcher() {
       )}
     </div>
   );
+}
+
+/* ── Responsive CSS injected once ── */
+const RESPONSIVE_CSS = `
+@media (max-width: 768px) {
+  .nav-header { padding: 0 12px !important; }
+  .nav-header-inner { gap: 8px !important; height: 52px !important; }
+  .nav-brand { gap: 8px !important; }
+  .nav-brand img { height: 28px !important; }
+  .nav-title { font-size: 0.875rem !important; }
+  .nav-subtitle { display: none !important; }
+  .nav-switcher-wrap { margin-right: 6px !important; }
+  .nav-switcher-btn { padding: 4px 8px !important; font-size: 0.625rem !important; }
+}
+@media (max-width: 400px) {
+  .nav-switcher-label { display: none !important; }
+  .nav-switcher-btn { padding: 6px !important; }
+  .nav-title { font-size: 0.8125rem !important; }
+  .nav-brand img { height: 24px !important; }
+}
+`;
+
+// Inject responsive styles once
+if (typeof document !== 'undefined') {
+  const id = 'nav-responsive-css';
+  if (!document.getElementById(id)) {
+    const style = document.createElement('style');
+    style.id = id;
+    style.textContent = RESPONSIVE_CSS;
+    document.head.appendChild(style);
+  }
 }
 
 /* ── Header styles matching Classification CSS exactly ── */
@@ -198,17 +230,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header — matching Classification System exactly */}
-      <header style={headerStyle}>
-        <div style={headerInnerStyle}>
+      <header style={headerStyle} className="nav-header">
+        <div style={headerInnerStyle} className="nav-header-inner">
           {/* Site Switcher */}
           <SiteSwitcher />
 
           {/* Brand: logo + title/subtitle */}
-          <Link to="/" style={brandStyle}>
+          <Link to="/" style={brandStyle} className="nav-brand">
             <img src={IRC_LOGO} alt="IRC" style={{ height: '36px', width: 'auto', display: 'block' }} />
             <div>
-              <div style={titleStyle}>Emergency Response Navigator</div>
-              <div style={subtitleStyle}>An Emergency Unit Project</div>
+              <div style={titleStyle} className="nav-title">Emergency Response Navigator</div>
+              <div style={subtitleStyle} className="nav-subtitle">An Emergency Unit Project</div>
             </div>
           </Link>
 
@@ -315,6 +347,29 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </Link>
               );
             })}
+            <button
+              onClick={() => { setChatOpen(!chatOpen); setMobileMenuOpen(false); }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 14px',
+                borderRadius: '6px',
+                fontSize: '0.8125rem',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
+                color: '#000',
+                background: '#FFC72C',
+                border: 'none',
+                cursor: 'pointer',
+                marginTop: '4px',
+                width: '100%',
+              }}
+            >
+              <MessageCircle style={{ width: '14px', height: '14px' }} />
+              Ask Albert
+            </button>
           </nav>
         )}
       </header>
