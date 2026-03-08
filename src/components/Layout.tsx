@@ -208,7 +208,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <img src={IRC_LOGO} alt="IRC" style={{ height: '36px', width: 'auto', display: 'block' }} />
             <div>
               <div style={titleStyle}>Emergency Response Navigator</div>
-              <div style={subtitleStyle}>a Global Crisis Analysis project</div>
+              <div style={subtitleStyle}>An Emergency Unit Project</div>
             </div>
           </Link>
 
