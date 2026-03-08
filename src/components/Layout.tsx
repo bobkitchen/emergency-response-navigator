@@ -1,8 +1,19 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ChatPanel from './ChatPanel';
 import SettingsModal from './SettingsModal';
 import { MessageCircle } from 'lucide-react';
+
+/* ── useWindowWidth hook for responsive inline styles ── */
+function useWindowWidth() {
+  const [width, setWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1024);
+  const handleResize = useCallback(() => setWidth(window.innerWidth), []);
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [handleResize]);
+  return width;
+}
 
 const NAV_ITEMS = [
   { path: '/', label: 'Home' },
@@ -34,7 +45,7 @@ const IRC_LOGO = `data:image/svg+xml,${encodeURIComponent('<svg viewBox="0 0 217
 /* ── Site Switcher ──
    Matches Classification's .site-switcher exactly:
    position relative, margin-right 12px, toggle is 0.75rem/600/0.04em uppercase */
-function SiteSwitcher() {
+function SiteSwitcher({ isMobile, isNarrow }: { isMobile: boolean; isNarrow: boolean }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
@@ -49,21 +60,20 @@ function SiteSwitcher() {
   }, []);
 
   return (
-    <div ref={ref} className="nav-switcher-wrap" style={{ position: 'relative', marginRight: '12px', flexShrink: 0 }}>
+    <div ref={ref} style={{ position: 'relative', marginRight: isMobile ? '6px' : '12px', flexShrink: 0 }}>
       <button
         onClick={() => setOpen(!open)}
-        className="nav-switcher-btn"
         style={{
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
-          padding: '6px 12px',
+          padding: isNarrow ? '6px' : isMobile ? '4px 8px' : '6px 12px',
           border: '1px solid #383838',
           borderRadius: '6px',
           background: 'transparent',
           color: '#D1D1D1',
           fontFamily: 'inherit',
-          fontSize: '0.75rem',
+          fontSize: isMobile ? '0.625rem' : '0.75rem',
           fontWeight: 600,
           letterSpacing: '0.04em',
           textTransform: 'uppercase' as const,
@@ -73,7 +83,7 @@ function SiteSwitcher() {
         aria-expanded={open}
         aria-haspopup="true"
       >
-        <span className="nav-switcher-label">Navigator</span>
+        {!isNarrow && <span>Navigator</span>}
         <svg
           width="12" height="12" viewBox="0 0 12 12" fill="none"
           style={{ transition: 'transform 0.2s ease', transform: open ? 'rotate(180deg)' : 'none' }}
@@ -128,88 +138,7 @@ function SiteSwitcher() {
   );
 }
 
-/* ── Responsive CSS injected once ── */
-const RESPONSIVE_CSS = `
-@media (max-width: 768px) {
-  .nav-header { padding: 0 12px !important; }
-  .nav-header-inner { gap: 8px !important; height: 52px !important; }
-  .nav-brand { gap: 8px !important; }
-  .nav-brand img { height: 28px !important; }
-  .nav-title { font-size: 0.875rem !important; }
-  .nav-subtitle { display: none !important; }
-  .nav-switcher-wrap { margin-right: 6px !important; }
-  .nav-switcher-btn { padding: 4px 8px !important; font-size: 0.625rem !important; }
-}
-@media (max-width: 400px) {
-  .nav-switcher-label { display: none !important; }
-  .nav-switcher-btn { padding: 6px !important; }
-  .nav-title { font-size: 0.8125rem !important; }
-  .nav-brand img { height: 24px !important; }
-}
-`;
-
-// Inject responsive styles once
-if (typeof document !== 'undefined') {
-  const id = 'nav-responsive-css';
-  if (!document.getElementById(id)) {
-    const style = document.createElement('style');
-    style.id = id;
-    style.textContent = RESPONSIVE_CSS;
-    document.head.appendChild(style);
-  }
-}
-
-/* ── Header styles matching Classification CSS exactly ── */
-const headerStyle: React.CSSProperties = {
-  background: '#000',
-  borderBottom: '4px solid #FFC72C',
-  padding: '0 24px',
-  position: 'sticky',
-  top: 0,
-  zIndex: 100,
-};
-
-const headerInnerStyle: React.CSSProperties = {
-  maxWidth: '1280px',
-  margin: '0 auto',
-  display: 'flex',
-  alignItems: 'center',
-  gap: '16px',
-  height: '60px',
-};
-
-const brandStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '12px',
-  flexShrink: 0,
-  textDecoration: 'none',
-};
-
-const titleStyle: React.CSSProperties = {
-  fontSize: '1rem',
-  fontWeight: 700,
-  letterSpacing: '-0.04em',
-  color: '#FFF',
-  lineHeight: 1.2,
-};
-
-const subtitleStyle: React.CSSProperties = {
-  fontSize: '0.6875rem',
-  fontWeight: 400,
-  letterSpacing: '0.1em',
-  textTransform: 'uppercase',
-  color: '#FFC72C',
-  marginTop: '2px',
-};
-
-const navStyle: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-  gap: '4px',
-  marginLeft: 'auto',
-};
-
+/* ── Nav link base (doesn't change with breakpoint) ── */
 const navLinkBase: React.CSSProperties = {
   padding: '8px 14px',
   borderRadius: '6px',
@@ -226,102 +155,163 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [chatOpen, setChatOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const windowWidth = useWindowWidth();
+
+  const isMobile = windowWidth <= 768;
+  const isNarrow = windowWidth <= 400;
+
+  /* ── Responsive header styles ── */
+  const headerStyle: React.CSSProperties = {
+    background: '#000',
+    borderBottom: '4px solid #FFC72C',
+    padding: isMobile ? '0 12px' : '0 24px',
+    position: 'sticky',
+    top: 0,
+    zIndex: 100,
+  };
+
+  const headerInnerStyle: React.CSSProperties = {
+    maxWidth: '1280px',
+    margin: '0 auto',
+    display: 'flex',
+    alignItems: 'center',
+    gap: isMobile ? '8px' : '16px',
+    height: isMobile ? '52px' : '60px',
+  };
+
+  const brandStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: isMobile ? '8px' : '12px',
+    flexShrink: 0,
+    textDecoration: 'none',
+  };
+
+  const logoHeight = isNarrow ? '24px' : isMobile ? '28px' : '36px';
+
+  const titleStyle: React.CSSProperties = {
+    fontSize: isNarrow ? '0.8125rem' : isMobile ? '0.875rem' : '1rem',
+    fontWeight: 700,
+    letterSpacing: '-0.04em',
+    color: '#FFF',
+    lineHeight: 1.2,
+  };
+
+  const subtitleStyle: React.CSSProperties = {
+    fontSize: '0.6875rem',
+    fontWeight: 400,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    color: '#FFC72C',
+    marginTop: '2px',
+    display: isMobile ? 'none' : 'block',
+  };
+
+  const navStyle: React.CSSProperties = {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px',
+    marginLeft: 'auto',
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
       {/* Header — matching Classification System exactly */}
-      <header style={headerStyle} className="nav-header">
-        <div style={headerInnerStyle} className="nav-header-inner">
+      <header style={headerStyle}>
+        <div style={headerInnerStyle}>
           {/* Site Switcher */}
-          <SiteSwitcher />
+          <SiteSwitcher isMobile={isMobile} isNarrow={isNarrow} />
 
           {/* Brand: logo + title/subtitle */}
-          <Link to="/" style={brandStyle} className="nav-brand">
-            <img src={IRC_LOGO} alt="IRC" style={{ height: '36px', width: 'auto', display: 'block' }} />
+          <Link to="/" style={brandStyle}>
+            <img src={IRC_LOGO} alt="IRC" style={{ height: logoHeight, width: 'auto', display: 'block' }} />
             <div>
-              <div style={titleStyle} className="nav-title">Emergency Response Navigator</div>
-              <div style={subtitleStyle} className="nav-subtitle">An Emergency Unit Project</div>
+              <div style={titleStyle}>Emergency Response Navigator</div>
+              <div style={subtitleStyle}>An Emergency Unit Project</div>
             </div>
           </Link>
 
-          {/* Nav — margin-left: auto pushes it right */}
-          <nav style={navStyle} className="hidden md:flex">
-            {NAV_ITEMS.map(item => {
-              const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  style={{
-                    ...navLinkBase,
-                    color: isActive ? '#000' : '#D1D1D1',
-                    background: isActive ? '#FFC72C' : 'transparent',
-                  }}
-                  onMouseEnter={e => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = '#FFF';
-                      e.currentTarget.style.background = '#383838';
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = '#D1D1D1';
-                      e.currentTarget.style.background = 'transparent';
-                    }
-                  }}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+          {/* Desktop Nav — hidden on mobile */}
+          {!isMobile && (
+            <nav style={navStyle}>
+              {NAV_ITEMS.map(item => {
+                const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    style={{
+                      ...navLinkBase,
+                      color: isActive ? '#000' : '#D1D1D1',
+                      background: isActive ? '#FFC72C' : 'transparent',
+                    }}
+                    onMouseEnter={e => {
+                      if (!isActive) {
+                        e.currentTarget.style.color = '#FFF';
+                        e.currentTarget.style.background = '#383838';
+                      }
+                    }}
+                    onMouseLeave={e => {
+                      if (!isActive) {
+                        e.currentTarget.style.color = '#D1D1D1';
+                        e.currentTarget.style.background = 'transparent';
+                      }
+                    }}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              })}
 
-            {/* Ask Albert — sits in the nav row, after nav links */}
+              {/* Ask Albert — sits in the nav row, after nav links */}
+              <button
+                onClick={() => setChatOpen(!chatOpen)}
+                style={{
+                  ...navLinkBase,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  color: '#000',
+                  background: '#FFC72C',
+                  border: 'none',
+                  cursor: 'pointer',
+                  marginLeft: '8px',
+                }}
+                title="Ask Albert"
+              >
+                <MessageCircle style={{ width: '14px', height: '14px' }} />
+                Ask Albert
+              </button>
+            </nav>
+          )}
+
+          {/* Mobile menu button — shown on mobile only */}
+          {isMobile && (
             <button
-              onClick={() => setChatOpen(!chatOpen)}
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               style={{
-                ...navLinkBase,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: '#000',
-                background: '#FFC72C',
+                marginLeft: 'auto',
+                padding: '8px',
+                borderRadius: '6px',
+                background: 'transparent',
                 border: 'none',
+                color: '#D1D1D1',
                 cursor: 'pointer',
-                marginLeft: '8px',
               }}
-              title="Ask Albert"
             >
-              <MessageCircle style={{ width: '14px', height: '14px' }} />
-              Ask Albert
+              <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
             </button>
-          </nav>
-
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden"
-            style={{
-              marginLeft: 'auto',
-              padding: '8px',
-              borderRadius: '6px',
-              background: 'transparent',
-              border: 'none',
-              color: '#D1D1D1',
-              cursor: 'pointer',
-            }}
-          >
-            <svg style={{ width: '20px', height: '20px' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+          )}
         </div>
 
         {/* Mobile Nav */}
-        {mobileMenuOpen && (
+        {isMobile && mobileMenuOpen && (
           <nav style={{ paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px' }}>
             {NAV_ITEMS.map(item => {
               const isActive = location.pathname === item.path;
@@ -337,7 +327,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     fontSize: '0.8125rem',
                     fontWeight: 700,
                     letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
+                    textTransform: 'uppercase' as const,
                     textDecoration: 'none',
                     color: isActive ? '#000' : '#D1D1D1',
                     background: isActive ? '#FFC72C' : 'transparent',
@@ -358,7 +348,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 fontSize: '0.8125rem',
                 fontWeight: 700,
                 letterSpacing: '0.04em',
-                textTransform: 'uppercase',
+                textTransform: 'uppercase' as const,
                 color: '#000',
                 background: '#FFC72C',
                 border: 'none',
