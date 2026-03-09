@@ -1,6 +1,10 @@
 import { searchProcess } from './search';
 import { processData } from './data';
 import resourceIndex from '@/data/resource-index.json';
+import { fetchClassifications, type Classification } from './supabase';
+
+// Cached classifications from Supabase
+let classificationCache: Classification[] | null = null;
 
 const SYSTEM_PROMPT = `You are the IRC Emergency Response Advisor — an AI assistant embedded in the Emergency Response Navigator tool. You have deep knowledge of IRC's Emergency Management Guidelines v2.0 and the complete emergency response process.
 
@@ -153,6 +157,44 @@ export async function* streamChat(
           resources.map(r =>
             `- **${r.name}** (${r.sector} › ${r.task}): ${r.url}`
           ).join('\n');
+      }
+
+      // Fetch live classification data from Supabase
+      try {
+        if (!classificationCache) {
+          classificationCache = await fetchClassifications();
+        }
+        if (classificationCache.length > 0) {
+          const severityLabel = (s: number) =>
+            s >= 3 ? 'Red' : s === 2 ? 'Orange' : 'Yellow';
+
+          // Summary stats
+          const total = classificationCache.length;
+          const bySeverity = { Red: 0, Orange: 0, Yellow: 0 };
+          const byStance: Record<string, number> = {};
+          const byCountry: Record<string, number> = {};
+          for (const c of classificationCache) {
+            const label = severityLabel(c.severity);
+            bySeverity[label] = (bySeverity[label] || 0) + 1;
+            byStance[c.stance] = (byStance[c.stance] || 0) + 1;
+            byCountry[c.country] = (byCountry[c.country] || 0) + 1;
+          }
+
+          // Recent classifications (last 10)
+          const recent = classificationCache.slice(0, 10);
+
+          contextText += '\n\n## Live Classification Data (from Supabase)\n\n';
+          contextText += `**${total} total classifications** — `;
+          contextText += `Red: ${bySeverity.Red}, Orange: ${bySeverity.Orange}, Yellow: ${bySeverity.Yellow}\n\n`;
+          contextText += `**By stance:** ${Object.entries(byStance).map(([k, v]) => `${k}: ${v}`).join(', ')}\n\n`;
+          contextText += `**Countries with classifications:** ${Object.keys(byCountry).length} (${Object.entries(byCountry).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([k, v]) => `${k}: ${v}`).join(', ')})\n\n`;
+          contextText += '**Recent classifications:**\n';
+          for (const c of recent) {
+            contextText += `- ${c.date || 'no date'} | ${c.country} | ${c.emergencyName || c.type} | ${severityLabel(c.severity)} (${c.stance})${c.notes ? ` — ${c.notes.slice(0, 80)}` : ''}\n`;
+          }
+        }
+      } catch (e) {
+        console.warn('Classification fetch failed, continuing without:', e);
       }
 
       if (contextText) {
