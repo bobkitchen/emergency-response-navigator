@@ -188,9 +188,17 @@ export async function* streamChat(
           contextText += `Red: ${bySeverity.Red}, Orange: ${bySeverity.Orange}, Yellow: ${bySeverity.Yellow}\n\n`;
           contextText += `**By stance:** ${Object.entries(byStance).map(([k, v]) => `${k}: ${v}`).join(', ')}\n\n`;
           contextText += `**Countries with classifications:** ${Object.keys(byCountry).length} (${Object.entries(byCountry).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([k, v]) => `${k}: ${v}`).join(', ')})\n\n`;
+          // Total affected summary
+          const withAffected = classificationCache.filter(c => c.totalAffected && c.totalAffected > 0);
+          if (withAffected.length > 0) {
+            const totalPeople = withAffected.reduce((sum, c) => sum + (c.totalAffected || 0), 0);
+            contextText += `**Affected population data:** ${withAffected.length} classifications have affected population figures, totaling ${totalPeople.toLocaleString()} people affected across all recorded emergencies.\n\n`;
+          }
+
           contextText += '**Recent classifications:**\n';
           for (const c of recent) {
-            contextText += `- ${c.date || 'no date'} | ${c.country} | ${c.emergencyName || c.type} | ${severityLabel(c.severity)} (${c.stance})${c.notes ? ` — ${c.notes.slice(0, 80)}` : ''}\n`;
+            const affected = c.totalAffected ? ` | ${c.totalAffected.toLocaleString()} affected` : '';
+            contextText += `- ${c.date || 'no date'} | ${c.country} | ${c.emergencyName || c.type} | ${severityLabel(c.severity)} (${c.stance})${affected}${c.notes ? ` — ${c.notes.slice(0, 80)}` : ''}\n`;
           }
         }
       } catch (e) {

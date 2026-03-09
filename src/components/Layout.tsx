@@ -263,7 +263,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 );
               })}
 
-              {/* Ask Albert — sits in the nav row, after nav links */}
+              {/* Ask Albert — outlined/ghost style; fills yellow when chat is open */}
               <button
                 onClick={() => setChatOpen(!chatOpen)}
                 style={{
@@ -271,11 +271,23 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  color: '#000',
-                  background: '#FFC72C',
-                  border: 'none',
+                  color: chatOpen ? '#000' : '#FFC72C',
+                  background: chatOpen ? '#FFC72C' : 'transparent',
+                  border: '1.5px solid #FFC72C',
                   cursor: 'pointer',
                   marginLeft: '8px',
+                }}
+                onMouseEnter={e => {
+                  if (!chatOpen) {
+                    e.currentTarget.style.color = '#000';
+                    e.currentTarget.style.background = '#FFC72C';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!chatOpen) {
+                    e.currentTarget.style.color = '#FFC72C';
+                    e.currentTarget.style.background = 'transparent';
+                  }
                 }}
                 title="Ask Albert"
               >
@@ -349,9 +361,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 fontWeight: 700,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase' as const,
-                color: '#000',
-                background: '#FFC72C',
-                border: 'none',
+                color: chatOpen ? '#000' : '#FFC72C',
+                background: chatOpen ? '#FFC72C' : 'transparent',
+                border: '1.5px solid #FFC72C',
                 cursor: 'pointer',
                 marginTop: '4px',
                 width: '100%',

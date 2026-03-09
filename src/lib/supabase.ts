@@ -25,6 +25,24 @@ const toCamelMap: Record<string, string> = {
   previous_severity: 'previousSeverity',
   created_at: 'createdAt',
   updated_at: 'updatedAt',
+  total_affected: 'totalAffected',
+  link_to_spreadsheet: 'linkToSpreadsheet',
+  ipc4_used: 'ipc4Used',
+  hazard_type: 'hazardType',
+  sap_tracking: 'sapTracking',
+  unique_id: 'uniqueId',
+  date_request_received: 'dateRequestReceived',
+  date_sent_for_entry: 'dateSentForEntry',
+  date_reviewed: 'dateReviewed',
+  date_approved: 'dateApproved',
+  date_expiration_notice_sent: 'dateExpirationNoticeSent',
+  who_engages_cp: 'whoEngagesCp',
+  entry_by: 'entryBy',
+  reviewed_by: 'reviewedBy',
+  approved_by: 'approvedBy',
+  notif_sent_by: 'notifSentBy',
+  raised_with_cp_region: 'raisedWithCpRegion',
+  code_number: 'codeNumber',
 };
 
 function mapToCamel(row: Record<string, unknown>): Record<string, unknown> {
@@ -53,6 +71,24 @@ export interface Classification {
   notes: string;
   confidence: unknown;
   subnational: unknown;
+  totalAffected: number | null;
+  linkToSpreadsheet: string | null;
+  ipc4Used: boolean | null;
+  hazardType: string | null;
+  sapTracking: string | null;
+  uniqueId: string | null;
+  dateRequestReceived: string | null;
+  dateSentForEntry: string | null;
+  dateReviewed: string | null;
+  dateApproved: string | null;
+  dateExpirationNoticeSent: string | null;
+  whoEngagesCp: string | null;
+  entryBy: string | null;
+  reviewedBy: string | null;
+  approvedBy: string | null;
+  notifSentBy: string | null;
+  raisedWithCpRegion: string | null;
+  codeNumber: string | null;
   createdAt: string;
   updatedAt: string;
 }
