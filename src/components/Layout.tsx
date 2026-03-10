@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import ChatPanel from './ChatPanel';
 import SettingsModal from './SettingsModal';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle, X, Settings } from 'lucide-react';
 import { useClassification } from '@/context/ClassificationContext';
 
 /* ── useWindowWidth hook for responsive inline styles ── */
@@ -24,6 +24,8 @@ const NAV_ITEMS = [
 
 // Site config for cross-site navigation
 const isGitHub = typeof window !== 'undefined' && window.location.hostname === 'bobkitchen.github.io';
+
+const SETTINGS_URL = isGitHub ? '/emergency-classification/settings.html' : 'https://bobkitchen.github.io/emergency-classification/settings.html';
 
 const SITES = {
   classification: {
@@ -329,6 +331,31 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <MessageCircle style={{ width: '14px', height: '14px' }} />
                 Ask Albert
               </button>
+
+              {/* Settings gear — links to shared settings page */}
+              <a
+                href={SETTINGS_URL}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '8px',
+                  borderRadius: '6px',
+                  color: '#D1D1D1',
+                  marginLeft: '4px',
+                  transition: 'color 0.15s, background 0.15s',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = '#FFF';
+                  e.currentTarget.style.background = '#383838';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = '#D1D1D1';
+                  e.currentTarget.style.background = 'transparent';
+                }}
+                title="Settings"
+              >
+                <Settings style={{ width: '18px', height: '18px' }} />
+              </a>
             </nav>
           )}
 
@@ -407,6 +434,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <MessageCircle style={{ width: '14px', height: '14px' }} />
               Ask Albert
             </button>
+            <a
+              href={SETTINGS_URL}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '8px 14px',
+                borderRadius: '6px',
+                fontSize: '0.8125rem',
+                fontWeight: 700,
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase' as const,
+                textDecoration: 'none',
+                color: '#D1D1D1',
+                marginTop: '4px',
+              }}
+            >
+              <Settings style={{ width: '14px', height: '14px' }} />
+              Settings
+            </a>
           </nav>
         )}
       </header>
