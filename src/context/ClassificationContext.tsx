@@ -10,6 +10,19 @@ const STORAGE_KEY = 'ern-active-classification';
 
 export type Stance = 'yellow' | 'orange' | 'red';
 
+/** Rank: red > orange > yellow. Higher number = higher stakes. */
+const STANCE_RANK: Record<string, number> = { yellow: 1, orange: 2, red: 3 };
+
+/** From a list of active classifications, return the one with the highest-stakes stance. */
+function highestStakes(classifications: SupabaseClassification[]): SupabaseClassification | null {
+  if (classifications.length === 0) return null;
+  return classifications.reduce((highest, cls) => {
+    const hRank = STANCE_RANK[highest.stance?.toLowerCase() ?? ''] ?? 0;
+    const cRank = STANCE_RANK[cls.stance?.toLowerCase() ?? ''] ?? 0;
+    return cRank > hRank ? cls : highest;
+  });
+}
+
 interface PersistedState {
   country: string;
   classificationId: string | null;
@@ -96,10 +109,11 @@ export function ClassificationProvider({ children }: { children: ReactNode }) {
       const active = getActiveClassificationsForCountry(allClassifications, saved.country);
       setCountryClassifications(active);
 
-      // If only one active classification, auto-select it
-      if (active.length === 1) {
-        setClassification(active[0]);
-        setStance(active[0].stance?.toLowerCase() as Stance);
+      // Auto-select the highest-stakes classification
+      const highest = highestStakes(active);
+      if (highest) {
+        setClassification(highest);
+        setStance(highest.stance?.toLowerCase() as Stance);
       }
     } catch {
       localStorage.removeItem(STORAGE_KEY);
@@ -122,14 +136,16 @@ export function ClassificationProvider({ children }: { children: ReactNode }) {
 
   const selectCountry = useCallback((c: string) => {
     setCountry(c);
-    setClassification(null);
-    setStance(null);
     const active = getActiveClassificationsForCountry(allClassifications, c);
     setCountryClassifications(active);
-    // Auto-select if only one
-    if (active.length === 1) {
-      setClassification(active[0]);
-      setStance(active[0].stance?.toLowerCase() as Stance);
+    // Auto-select the highest-stakes classification
+    const highest = highestStakes(active);
+    if (highest) {
+      setClassification(highest);
+      setStance(highest.stance?.toLowerCase() as Stance);
+    } else {
+      setClassification(null);
+      setStance(null);
     }
   }, [allClassifications]);
 
