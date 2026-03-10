@@ -35,7 +35,7 @@ const SITES = {
     label: 'CRF Calculator',
     shortLabel: 'CRF',
     description: 'Crisis Response Fund allocation calculator',
-    url: isGitHub ? '/crf-calculator/' : 'https://bobkitchen.github.io/crf-calculator/',
+    url: isGitHub ? '/crf-calculator/allocation-calculator.html' : 'https://bobkitchen.github.io/crf-calculator/allocation-calculator.html',
   },
   navigator: {
     label: 'Response Navigator',
