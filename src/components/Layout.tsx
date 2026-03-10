@@ -111,33 +111,27 @@ function SiteSwitcher({ isMobile, isNarrow }: { isMobile: boolean; isNarrow: boo
           zIndex: 200,
           overflow: 'hidden',
         }}>
-          <a
-            href={SITES.navigator.url}
-            style={{
-              display: 'block',
-              padding: '12px 16px',
-              background: '#FFF8E5',
-              borderLeft: '3px solid #FFC72C',
-              textDecoration: 'none',
-            }}
-          >
-            <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>{SITES.navigator.label}</span>
-            <span style={{ display: 'block', fontSize: '0.75rem', color: '#666', marginTop: '2px', lineHeight: 1.3 }}>{SITES.navigator.description}</span>
-          </a>
-          <a
-            href={SITES.classification.url}
-            style={{
-              display: 'block',
-              padding: '12px 16px',
-              textDecoration: 'none',
-              transition: 'background 0.12s ease',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#F6F6F6')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-          >
-            <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>{SITES.classification.label}</span>
-            <span style={{ display: 'block', fontSize: '0.75rem', color: '#666', marginTop: '2px', lineHeight: 1.3 }}>{SITES.classification.description}</span>
-          </a>
+          {Object.entries(SITES).map(([key, site]) => {
+            const isCurrent = key === 'navigator';
+            return (
+              <a
+                key={key}
+                href={site.url}
+                style={{
+                  display: 'block',
+                  padding: '12px 16px',
+                  textDecoration: 'none',
+                  transition: 'background 0.12s ease',
+                  ...(isCurrent ? { background: '#FFF8E5', borderLeft: '3px solid #FFC72C' } : {}),
+                }}
+                onMouseEnter={e => { if (!isCurrent) e.currentTarget.style.background = '#F6F6F6'; }}
+                onMouseLeave={e => { if (!isCurrent) e.currentTarget.style.background = 'transparent'; }}
+              >
+                <span style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#000', lineHeight: 1.3 }}>{site.label}</span>
+                <span style={{ display: 'block', fontSize: '0.75rem', color: '#666', marginTop: '2px', lineHeight: 1.3 }}>{site.description}</span>
+              </a>
+            );
+          })}
         </div>
       )}
     </div>
