@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ClassificationProvider } from '@/context/ClassificationContext';
 import Layout from '@/components/Layout';
 import Home from '@/pages/Home';
 import Navigator from '@/pages/Navigator';
@@ -28,14 +29,16 @@ if ('serviceWorker' in navigator) {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter basename="/emergency-response-navigator">
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/navigator" element={<Navigator />} />
-          <Route path="/navigator/:sectorId" element={<Navigator />} />
-          <Route path="/resources" element={<Resources />} />
-        </Routes>
-      </Layout>
+      <ClassificationProvider>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/navigator" element={<Navigator />} />
+            <Route path="/navigator/:sectorId" element={<Navigator />} />
+            <Route path="/resources" element={<Resources />} />
+          </Routes>
+        </Layout>
+      </ClassificationProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );

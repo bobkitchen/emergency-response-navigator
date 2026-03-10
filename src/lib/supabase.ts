@@ -108,3 +108,69 @@ export async function fetchClassifications(): Promise<Classification[]> {
     return [];
   }
 }
+
+/** Check whether a classification has expired */
+export function isExpired(expirationDate: string | null): boolean {
+  if (!expirationDate) return false;
+  return new Date(expirationDate) < new Date();
+}
+
+/** Aliases: Supabase may store short names like "Syria" while COUNTRIES uses "Syrian Arab Republic" */
+const COUNTRY_NAME_ALIASES: Record<string, string[]> = {
+  'Syrian Arab Republic': ['Syria'],
+  'Bolivia (Plurinational State of)': ['Bolivia'],
+  'Iran (Islamic Republic of)': ['Iran'],
+  "Lao People's Democratic Republic": ['Laos'],
+  'Moldova (Republic of)': ['Moldova'],
+  "Democratic People's Republic of Korea": ['North Korea'],
+  'Democratic Republic of the Congo': ['DRC', 'DR Congo'],
+  'State of Palestine': ['Palestine'],
+  'United Republic of Tanzania': ['Tanzania'],
+  'Venezuela (Bolivarian Republic of)': ['Venezuela'],
+  'Viet Nam': ['Vietnam'],
+  'United States of America': ['USA'],
+  'United Kingdom': ['UK'],
+  'Micronesia (Federated States of)': ['Micronesia'],
+};
+
+/** Build reverse map: alias → canonical, and canonical → canonical */
+function countryMatches(selectedCountry: string, classificationCountry: string): boolean {
+  if (!selectedCountry || !classificationCountry) return false;
+  const sel = selectedCountry.toLowerCase();
+  const cls = classificationCountry.toLowerCase();
+
+  // Direct match
+  if (sel === cls) return true;
+
+  // Check if the selected canonical name has aliases that match the classification country
+  const aliases = COUNTRY_NAME_ALIASES[selectedCountry];
+  if (aliases?.some(a => a.toLowerCase() === cls)) return true;
+
+  // Check reverse: classification country might be the canonical, selected might be alias
+  for (const [canonical, aliasList] of Object.entries(COUNTRY_NAME_ALIASES)) {
+    if (canonical.toLowerCase() === cls && aliasList.some(a => a.toLowerCase() === sel)) return true;
+    if (canonical.toLowerCase() === sel && aliasList.some(a => a.toLowerCase() === cls)) return true;
+  }
+
+  // Substring containment as final fallback (e.g. "Congo" in "Democratic Republic of the Congo")
+  if (sel.includes(cls) || cls.includes(sel)) return true;
+
+  return false;
+}
+
+/**
+ * Filter classifications for a country, excluding expired and white-stance entries.
+ * Sorted by date descending (most recent first).
+ */
+export function getActiveClassificationsForCountry(
+  all: Classification[],
+  country: string,
+): Classification[] {
+  return all
+    .filter(c =>
+      countryMatches(country, c.country) &&
+      !isExpired(c.expirationDate) &&
+      c.stance?.toLowerCase() !== 'white'
+    )
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+}
