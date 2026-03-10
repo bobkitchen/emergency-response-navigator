@@ -31,6 +31,12 @@ const SITES = {
     description: 'Classify and track emergency responses',
     url: isGitHub ? '/emergency-classification/' : 'https://bobkitchen.github.io/emergency-classification/',
   },
+  crf: {
+    label: 'CRF Calculator',
+    shortLabel: 'CRF',
+    description: 'Crisis Response Fund allocation calculator',
+    url: isGitHub ? '/crf-calculator/' : 'https://bobkitchen.github.io/crf-calculator/',
+  },
   navigator: {
     label: 'Response Navigator',
     shortLabel: 'Navigator',
